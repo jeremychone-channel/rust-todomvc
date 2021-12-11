@@ -1,0 +1,14 @@
+{
+	"name": "todomvc-ui",
+	"type": "module",
+	"version": "0.0.1",
+	"description": "TodoMVC frontend",
+	"dependencies": {
+
+	},
+	"devDependencies": {
+		
+	},
+	"author": "Jeremy Chone",
+	"license": "MIT"
+}
