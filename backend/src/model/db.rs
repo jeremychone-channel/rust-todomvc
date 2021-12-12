@@ -26,7 +26,7 @@ pub async fn init_db() -> Result<Db, sqlx::Error> {
 	}
 
 	// returning the app db
-	new_db_pool(PG_HOST, PG_ROOT_DB, PG_ROOT_USER, PG_ROOT_PWD, 1).await
+	new_db_pool(PG_HOST, PG_APP_DB, PG_APP_USER, PG_APP_PWD, PG_APP_MAX_CON).await
 }
 
 async fn pexec(db: &Db, file: &str) -> Result<(), sqlx::Error> {
