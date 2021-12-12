@@ -7,6 +7,14 @@ const PG_HOST: &str = "localhost";
 const PG_ROOT_DB: &str = "postgres";
 const PG_ROOT_USER: &str = "postgres";
 const PG_ROOT_PWD: &str = "postgres";
+// app db
+const PG_APP_DB: &str = "app_db";
+const PG_APP_USER: &str = "app_user";
+const PG_APP_PWD: &str = "app_pwd_to_change";
+const PG_APP_MAX_CON: u32 = 5;
+// sql files
+const SQL_DIR: &str = "sql/";
+const SQL_RECREATE: &str = "sql/00-recreate-db.sql";
 
 pub type Db = Pool<Postgres>;
 
