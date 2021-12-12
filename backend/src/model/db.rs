@@ -23,13 +23,5 @@ async fn new_db_pool(host: &str, db: &str, user: &str, pwd: &str, max_con: u32) 
 }
 
 #[cfg(test)]
-mod tests {
-	use super::init_db;
-
-	#[tokio::test]
-	async fn model_db_init_db() -> Result<(), Box<dyn std::error::Error>> {
-		let db = init_db().await?;
-
-		Ok(())
-	}
-}
+#[path = "../_tests/model_db.rs"]
+mod tests;
