@@ -19,6 +19,13 @@ const SQL_RECREATE: &str = "sql/00-recreate-db.sql";
 pub type Db = Pool<Postgres>;
 
 pub async fn init_db() -> Result<Db, sqlx::Error> {
+	// -- Create the db with PG_ROOT (dev only)
+	{
+		let root_db = new_db_pool(PG_HOST, PG_ROOT_DB, PG_ROOT_USER, PG_ROOT_PWD, 1).await?;
+		pexec(&root_db, SQL_RECREATE).await?;
+	}
+
+	// returning the app db
 	new_db_pool(PG_HOST, PG_ROOT_DB, PG_ROOT_USER, PG_ROOT_PWD, 1).await
 }
 
