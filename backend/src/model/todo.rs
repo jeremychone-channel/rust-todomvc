@@ -25,3 +25,7 @@ impl TodoMac {
 	}
 }
 // endregion: TodoMac
+
+#[cfg(test)]
+#[path = "../_tests/model_todo.rs"]
+mod tests;
