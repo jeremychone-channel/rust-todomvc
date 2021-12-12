@@ -17,7 +17,7 @@ impl TodoMac {
 		let sql = "SELECT id, cid, title FROM todo ORDER BY id DESC";
 
 		// build the sqlx-query
-		let query = sqlx::query_as::<_, Todo>(&sql);
+		let query = sqlx::query_as(&sql);
 		// execute the query
 		let todos = query.fetch_all(db).await?;
 
