@@ -1,5 +1,6 @@
 use sqlx::postgres::PgPoolOptions;
 use sqlx::{Pool, Postgres};
+use std::fs;
 use std::time::Duration;
 
 const PG_HOST: &str = "localhost";
@@ -14,6 +15,22 @@ pub async fn init_db() -> Result<Db, sqlx::Error> {
 }
 
 async fn pexec(db: &Db, file: &str) -> Result<(), sqlx::Error> {
+	// Read the file
+	let content = fs::read_to_string(file).map_err(|ex| {
+		println!("ERROR reading {} (cause: {:?})", file, ex);
+		ex
+	})?;
+
+	// TODO: Make the split more sql proof
+	let sqls: Vec<&str> = content.split(";").collect();
+
+	for sql in sqls {
+		match sqlx::query(&sql).execute(db).await {
+			Ok(_) => (),
+			Err(ex) => println!("WARNING - pexec - Sql file '{}' FAILED cause: {}", file, ex),
+		}
+	}
+
 	Ok(())
 }
 
