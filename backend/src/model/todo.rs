@@ -6,3 +6,7 @@ pub struct Todo {
 	pub title: String,
 }
 // endregion: Todo Types
+
+// region:    TodoMac
+pub struct TodoMac;
+// endregion: TodoMac
