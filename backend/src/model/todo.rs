@@ -1,3 +1,5 @@
+use sqlb::HasFields;
+
 use super::db::Db;
 use crate::model;
 
@@ -10,7 +12,7 @@ pub struct Todo {
 	pub status: TodoStatus,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(sqlb::Fields, Default, Debug, Clone)]
 pub struct TodoPatch {
 	pub cid: Option<i64>,
 	pub title: Option<String>,
@@ -24,6 +26,7 @@ pub enum TodoStatus {
 	Open,
 	Close,
 }
+sqlb::bindable!(TodoStatus);
 // endregion: Todo Types
 
 // region:    TodoMac
@@ -31,12 +34,17 @@ pub struct TodoMac;
 
 impl TodoMac {
 	pub async fn create(db: &Db, data: TodoPatch) -> Result<Todo, model::Error> {
-		let sql = "INSERT INTO todo (cid, title) VALUES ($1, $2) returning id, cid, title, status";
-		let query = sqlx::query_as::<_, Todo>(&sql)
-			.bind(123 as i64) // FIXME - should come from user context
-			.bind(data.title.unwrap_or_else(|| "untitled".to_string()));
+		// let sql = "INSERT INTO todo (cid, title) VALUES ($1, $2) returning id, cid, title, status";
+		// let query = sqlx::query_as::<_, Todo>(&sql)
+		// 	.bind(123 as i64) // FIXME - should come from user context
+		// 	.bind(data.title.unwrap_or_else(|| "untitled".to_string()));
 
-		let todo = query.fetch_one(db).await?;
+		let sb = sqlb::insert()
+			.table("todo")
+			.data(data.fields())
+			.returning(&["id", "cid", "title", "status"]);
+
+		let todo = sb.fetch_one(db).await?;
 
 		Ok(todo)
 	}

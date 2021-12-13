@@ -9,6 +9,7 @@ async fn model_todo_create() -> Result<(), Box<dyn std::error::Error>> {
 	let db = init_db().await?;
 	let data_fx = TodoPatch {
 		title: Some("test - model_todo_create 1".to_string()),
+		cid: Some(123),
 		..Default::default()
 	};
 
