@@ -9,6 +9,8 @@ CREATE TABLE todo (
   id bigserial,
   cid bigint NOT NULL, -- creator user id
 	ctime timestamp with time zone DEFAULT now(),
+  mid bigint, -- modifier user id
+	mtime timestamp with time zone,   
   title text NOT NULL,
   status todo_status_enum NOT NULL DEFAULT 'open'
 );

@@ -1,4 +1,4 @@
-use sqlb::HasFields;
+use sqlb::{HasFields, Raw};
 
 use super::db::Db;
 use crate::model;
@@ -60,9 +60,14 @@ impl TodoMac {
 	}
 
 	pub async fn update(db: &Db, utx: &UserCtx, id: i64, data: TodoPatch) -> Result<Todo, model::Error> {
+		let mut fields = data.fields();
+		// augment the fields with the cid/ctime
+		fields.push(("mid", utx.user_id).into());
+		fields.push(("ctime", Raw("now()")).into());
+
 		let sb = sqlb::update()
 			.table(Self::TABLE)
-			.data(data.fields())
+			.data(fields)
 			.and_where_eq("id", id)
 			.returning(Self::COLUMNS);
 
