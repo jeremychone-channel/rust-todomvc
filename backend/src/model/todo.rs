@@ -84,6 +84,17 @@ impl TodoMac {
 
 		Ok(todos)
 	}
+
+	pub async fn delete(db: &Db, _utx: &UserCtx, id: i64) -> Result<Todo, model::Error> {
+		let sb = sqlb::delete()
+			.table(Self::TABLE)
+			.returning(Self::COLUMNS)
+			.and_where_eq("id", id);
+
+		let result = sb.fetch_one(db).await;
+
+		handle_fetch_one_result(result, Self::TABLE, id)
+	}
 }
 // endregion: TodoMac
 
