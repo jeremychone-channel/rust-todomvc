@@ -46,7 +46,6 @@ impl TodoMac {
 	}
 
 	pub async fn list(db: &Db) -> Result<Vec<Todo>, model::Error> {
-		// let sql = "SELECT id, cid, title, status FROM todo ORDER BY id DESC";
 		let sb = sqlb::select()
 			.table("todo")
 			.columns(&["id", "cid", "title", "status"])
