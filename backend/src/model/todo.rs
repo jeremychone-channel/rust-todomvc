@@ -33,7 +33,7 @@ impl TodoMac {
 	pub async fn create(db: &Db, data: TodoPatch) -> Result<Todo, model::Error> {
 		let sql = "INSERT INTO todo (cid, title) VALUES ($1, $2) returning id, cid, title, status";
 		let query = sqlx::query_as::<_, Todo>(&sql)
-			.bind(123 as i64)
+			.bind(123 as i64) // FIXME - should come from user context
 			.bind(data.title.unwrap_or_else(|| "untitled".to_string()));
 
 		let todo = query.fetch_one(db).await?;
