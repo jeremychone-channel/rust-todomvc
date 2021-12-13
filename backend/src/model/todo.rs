@@ -7,12 +7,22 @@ pub struct Todo {
 	pub id: i64,
 	pub cid: i64, // creator id
 	pub title: String,
+	pub status: TodoStatus,
 }
 
 #[derive(Default, Debug, Clone)]
 pub struct TodoPatch {
 	pub cid: Option<i64>,
 	pub title: Option<String>,
+	pub status: Option<TodoStatus>,
+}
+
+#[derive(sqlx::Type, Debug, Clone, PartialEq, Eq)]
+#[sqlx(type_name = "todo_status_enum")]
+#[sqlx(rename_all = "lowercase")]
+pub enum TodoStatus {
+	Open,
+	Close,
 }
 // endregion: Todo Types
 
@@ -21,7 +31,7 @@ pub struct TodoMac;
 
 impl TodoMac {
 	pub async fn create(db: &Db, data: TodoPatch) -> Result<Todo, model::Error> {
-		let sql = "INSERT INTO todo (cid, title) VALUES ($1, $2) returning id, cid, title";
+		let sql = "INSERT INTO todo (cid, title) VALUES ($1, $2) returning id, cid, title, status";
 		let query = sqlx::query_as::<_, Todo>(&sql)
 			.bind(123 as i64)
 			.bind(data.title.unwrap_or_else(|| "untitled".to_string()));
@@ -32,7 +42,7 @@ impl TodoMac {
 	}
 
 	pub async fn list(db: &Db) -> Result<Vec<Todo>, model::Error> {
-		let sql = "SELECT id, cid, title FROM todo ORDER BY id DESC";
+		let sql = "SELECT id, cid, title, status FROM todo ORDER BY id DESC";
 
 		// build the sqlx-query
 		let query = sqlx::query_as(&sql);

@@ -1,5 +1,5 @@
 use crate::model::db::init_db;
-use crate::model::todo::TodoPatch;
+use crate::model::todo::{TodoPatch, TodoStatus};
 
 use super::TodoMac;
 
@@ -18,6 +18,7 @@ async fn model_todo_create() -> Result<(), Box<dyn std::error::Error>> {
 	// -- CHECK
 	assert!(todo_created.id >= 1000, "Id should be >= 1000");
 	assert_eq!(data_fx.title.unwrap(), todo_created.title);
+	assert_eq!(TodoStatus::Open, todo_created.status);
 
 	Ok(())
 }
