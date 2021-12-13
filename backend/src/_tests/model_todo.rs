@@ -26,6 +26,23 @@ async fn model_todo_create() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[tokio::test]
+async fn model_todo_get() -> Result<(), Box<dyn std::error::Error>> {
+	// -- FIXTURE
+	let db = init_db().await?;
+	let utx = utx_from_token("123").await?;
+
+	// -- ACTION
+	let todo = TodoMac::get(&db, &utx, 100).await?;
+
+	// -- CHECK
+	assert_eq!(100, todo.id);
+	assert_eq!("todo 100", todo.title);
+	assert_eq!(TodoStatus::Close, todo.status);
+
+	Ok(())
+}
+
+#[tokio::test]
 async fn model_todo_list() -> Result<(), Box<dyn std::error::Error>> {
 	// -- FIXTURE
 	let db = init_db().await?;
