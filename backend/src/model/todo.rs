@@ -9,6 +9,7 @@ pub struct Todo {
 	pub title: String,
 }
 
+#[derive(Default, Debug, Clone)]
 pub struct TodoPatch {
 	pub cid: Option<i64>,
 	pub title: Option<String>,
