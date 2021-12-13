@@ -43,6 +43,33 @@ async fn model_todo_get() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[tokio::test]
+async fn model_todo_update_ok() -> Result<(), Box<dyn std::error::Error>> {
+	// -- FIXTURE
+	let db = init_db().await?;
+	let utx = utx_from_token("123").await?;
+	let data_fx = TodoPatch {
+		title: Some("test - model_todo_update_ok 1".to_string()),
+		..Default::default()
+	};
+	let todo_fx = TodoMac::create(&db, &utx, data_fx.clone()).await?;
+	let update_data_fx = TodoPatch {
+		title: Some("test - model_todo_update_ok 2".to_string()),
+		..Default::default()
+	};
+
+	// -- ACTION
+	let todo_updated = TodoMac::update(&db, &utx, todo_fx.id, update_data_fx.clone()).await?;
+
+	// -- CHECK
+	let todos = TodoMac::list(&db, &utx).await?;
+	assert_eq!(3, todos.len());
+	assert_eq!(todo_fx.id, todo_updated.id);
+	assert_eq!(update_data_fx.title.unwrap(), todo_updated.title);
+
+	Ok(())
+}
+
+#[tokio::test]
 async fn model_todo_list() -> Result<(), Box<dyn std::error::Error>> {
 	// -- FIXTURE
 	let db = init_db().await?;
