@@ -54,7 +54,10 @@ impl TodoMac {
 			.columns(Self::COLUMNS)
 			.and_where_eq("id", id);
 
-		let todo = sb.fetch_one(db).await?;
+		let todo = sb.fetch_one(db).await.map_err(|sqlx_error| match sqlx_error {
+			sqlx::Error::RowNotFound => model::Error::EntityNotFound(Self::TABLE, id.to_string()),
+			other => model::Error::SqlxError(other),
+		})?;
 
 		Ok(todo)
 	}

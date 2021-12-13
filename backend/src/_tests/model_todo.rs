@@ -1,3 +1,4 @@
+use crate::model;
 use crate::model::db::init_db;
 use crate::model::todo::{TodoPatch, TodoStatus};
 use crate::security::utx_from_token;
@@ -52,7 +53,14 @@ async fn model_todo_get_wong_id() -> Result<(), Box<dyn std::error::Error>> {
 	let result = TodoMac::get(&db, &utx, 999).await;
 
 	// -- CHECK
-	println!("\n\n --> {:?}", result);
+	match result {
+		Ok(_) => assert!(false, "Should not succeed"),
+		Err(model::Error::EntityNotFound(typ, id)) => {
+			assert_eq!("todo", typ);
+			assert_eq!(999.to_string(), id);
+		}
+		other_error => assert!(false, "Wrong Error {:?} ", other_error),
+	}
 
 	Ok(())
 }
