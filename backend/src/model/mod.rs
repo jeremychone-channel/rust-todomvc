@@ -1,9 +1,8 @@
-use thiserror::Error as ThisError;
-
 mod db;
 mod todo;
 
-#[derive(ThisError, Debug)]
+// region:    Error
+#[derive(thiserror::Error, Debug)]
 pub enum Error {
 	#[error("Entity Not Found - {0}[{1}] ")]
 	EntityNotFound(&'static str, String),
@@ -14,3 +13,5 @@ pub enum Error {
 	#[error(transparent)]
 	IOError(#[from] std::io::Error),
 }
+
+// endregion: Error

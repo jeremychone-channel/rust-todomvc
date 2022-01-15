@@ -1,9 +1,8 @@
+use super::{Todo, TodoMac};
 use crate::model;
 use crate::model::db::init_db;
 use crate::model::todo::{TodoPatch, TodoStatus};
 use crate::security::utx_from_token;
-
-use super::{Todo, TodoMac};
 
 #[tokio::test]
 async fn model_todo_create() -> Result<(), Box<dyn std::error::Error>> {

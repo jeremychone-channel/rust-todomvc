@@ -1,8 +1,7 @@
-use sqlb::{HasFields, Raw};
-
 use super::db::Db;
 use crate::model;
 use crate::security::UserCtx;
+use sqlb::{HasFields, Raw};
 
 // region:    Todo Types
 #[derive(sqlx::FromRow, Debug, Clone)]
@@ -37,10 +36,11 @@ impl TodoMac {
 	const COLUMNS: &'static [&'static str] = &["id", "cid", "title", "status"];
 }
 
+/// Todo Model Access Controller
 impl TodoMac {
 	pub async fn create(db: &Db, utx: &UserCtx, data: TodoPatch) -> Result<Todo, model::Error> {
 		let mut fields = data.fields();
-		fields.push(("cid", 123).into());
+		fields.push(("cid", utx.user_id).into());
 		let sb = sqlb::insert().table(Self::TABLE).data(fields).returning(Self::COLUMNS);
 
 		let todo = sb.fetch_one(db).await?;
@@ -111,6 +111,8 @@ fn handle_fetch_one_result(
 }
 // endregion: Utils
 
+// region:    Test
 #[cfg(test)]
 #[path = "../_tests/model_todo.rs"]
 mod tests;
+// endregion: Test

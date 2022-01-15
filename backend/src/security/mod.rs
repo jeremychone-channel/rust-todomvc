@@ -13,8 +13,10 @@ pub async fn utx_from_token(token: &str) -> Result<UserCtx, Error> {
 	}
 }
 
+// region:    Error
 #[derive(ThisError, Debug)]
 pub enum Error {
 	#[error("Invalid Token {0}")]
 	InvalidToken(String),
 }
+// endregion: Error

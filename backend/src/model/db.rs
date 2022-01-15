@@ -76,6 +76,8 @@ async fn new_db_pool(host: &str, db: &str, user: &str, pwd: &str, max_con: u32) 
 		.await
 }
 
+// region:    Test
 #[cfg(test)]
 #[path = "../_tests/model_db.rs"]
 mod tests;
+// endregion: Test
