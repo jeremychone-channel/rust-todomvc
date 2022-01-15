@@ -3,6 +3,8 @@ use std::path::Path;
 use std::sync::Arc;
 use warp::Filter;
 
+mod todo;
+
 pub async fn start_web(web_folder: &str, web_port: u16, db: Arc<Db>) -> Result<(), Error> {
 	// validate web_folder
 	if !Path::new(web_folder).exists() {
