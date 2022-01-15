@@ -1,6 +1,9 @@
 mod db;
 mod todo;
 
+// re-export
+pub use db::Db;
+
 // region:    Error
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
