@@ -4,6 +4,7 @@ mod model;
 mod security;
 mod web;
 
-fn main() {
-	println!("Hello world");
+#[tokio::main]
+async fn main() {
+	// compute the web_folder
 }
