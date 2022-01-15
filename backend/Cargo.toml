@@ -16,3 +16,6 @@ warp = "0.3"
 # DB Libs
 sqlx = { version = "0.5", features = [ "runtime-tokio-rustls", "postgres" ] }
 sqlb = "0.0.7"
+
+[dev-dependencies]
+anyhow = "1"
