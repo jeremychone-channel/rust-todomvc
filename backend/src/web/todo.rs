@@ -10,6 +10,15 @@ pub fn todo_rest_filters<F>(
 ) -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
 	let todos_path = warp::path(base_path).and(warp::path("todos"));
 	let common = with_db(db.clone()).and(do_auth(db.clone()));
+
+	// LIST todos `GET todos/`
+	let list = todos_path
+		.and(warp::get())
+		.and(warp::path::end())
+		.and(common.clone())
+		.and_then(todo_list);
+
+	list
 }
 
 // region:    Filter Utils
