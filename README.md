@@ -4,6 +4,12 @@
 cargo watch -q -c -w src/ -x 'test model_ -- --test-threads=1 --nocapture'
 ```
 
+## Dev Web
+
+```sh
+cargo watch -q -c -w src/ -x 'run -- ../frontend/web-folder'
+```
+
 ## DB
 
 ```sh
