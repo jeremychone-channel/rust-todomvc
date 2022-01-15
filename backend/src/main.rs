@@ -2,6 +2,7 @@
 use model::init_db;
 use std::env;
 use std::sync::Arc;
+use web::start_web;
 
 mod model;
 mod security;
@@ -21,4 +22,10 @@ async fn main() {
 	// TODO - loop until valid DB
 	let db = init_db().await.expect("Cannot init db");
 	let db = Arc::new(db);
+
+	// start the server
+	match start_web(&web_folder, web_port, db).await {
+		Ok(_) => println!("Server ended"),
+		Err(ex) => println!("ERROR - web server failed to start. Cause {:?}", ex),
+	}
 }
