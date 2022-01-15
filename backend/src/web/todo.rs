@@ -7,3 +7,7 @@ pub fn todo_rest_filters<F>(
 	db: Arc<Db>,
 ) -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
 }
+
+// region:    Filter Utils
+
+// endregion: Filter Utils
