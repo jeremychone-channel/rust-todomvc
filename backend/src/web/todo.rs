@@ -8,6 +8,7 @@ pub fn todo_rest_filters<F>(
 	base_path: &'static str,
 	db: Arc<Db>,
 ) -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
+	let todos_path = warp::path(base_path).and(warp::path("todos"));
 }
 
 // region:    Filter Utils
