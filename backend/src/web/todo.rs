@@ -40,3 +40,9 @@ pub fn do_auth(_db: Arc<Db>) -> impl Filter<Extract = (UserCtx,), Error = Reject
 	warp::any().and_then(|| async { Ok::<UserCtx, Rejection>(utx_from_token("123").await.unwrap()) })
 }
 // endregion: Filter Utils
+
+// region:    Test
+#[cfg(test)]
+#[path = "../_tests/web_todo.rs"]
+mod tests;
+// endregion: Test
