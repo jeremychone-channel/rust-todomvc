@@ -26,7 +26,7 @@ pub fn todo_rest_filters(
 
 async fn todo_list(db: Arc<Db>, utx: UserCtx) -> Result<Json, warp::Rejection> {
 	// FIXME: Add proper error handling
-	let todos = TodoMac::list(&db, &utx).await.unwrap();
+	let todos = TodoMac::list(&db, &utx).await?;
 
 	let response = json!({ "data": todos });
 	Ok(warp::reply::json(&response))
