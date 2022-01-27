@@ -51,7 +51,7 @@ pub fn todo_rest_filters(
 		.and(warp::path::param())
 		.and_then(todo_delete);
 
-	list
+	list.or(get).or(create).or(update).or(delete)
 }
 
 async fn todo_list(db: Arc<Db>, utx: UserCtx) -> Result<Json, warp::Rejection> {
