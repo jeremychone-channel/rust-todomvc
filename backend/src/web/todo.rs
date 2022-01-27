@@ -30,6 +30,11 @@ async fn todo_list(db: Arc<Db>, utx: UserCtx) -> Result<Json, warp::Rejection> {
 	json_response(todos)
 }
 
+async fn todo_get(db: Arc<Db>, utx: UserCtx, id: i64) -> Result<Json, warp::Rejection> {
+	let todo = TodoMac::get(&db, &utx, id).await?;
+	json_response(todo)
+}
+
 // region:    Utils
 fn json_response<D: Serialize>(data: D) -> Result<Json, warp::Rejection> {
 	let response = json!({ "data": data });
