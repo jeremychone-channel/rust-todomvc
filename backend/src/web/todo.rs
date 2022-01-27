@@ -29,6 +29,13 @@ pub fn todo_rest_filters(
 		.and(warp::path::param())
 		.and_then(todo_get);
 
+	/// CREATE todo `POST /todos with body TodoPatch`
+	let create = todos_path
+		.and(warp::post())
+		.and(common.clone())
+		.and(warp::body::json())
+		.and_then(todo_create);
+
 	list
 }
 
