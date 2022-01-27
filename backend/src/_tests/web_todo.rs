@@ -1,5 +1,6 @@
 use super::todo_rest_filters;
-use crate::model::{init_db, Todo, TodoStatus};
+use crate::model::{init_db, Todo, TodoMac, TodoStatus};
+use crate::security::utx_from_token;
 use crate::web::handle_rejection;
 use anyhow::{Context, Result};
 use serde::Deserialize;
@@ -136,6 +137,41 @@ async fn web_todo_update_ok() -> Result<()> {
 	assert_eq!(100, todo.id, "todo.id");
 	assert_eq!(TITLE, todo.title);
 	assert_eq!(TodoStatus::Open, todo.status);
+
+	Ok(())
+}
+
+#[tokio::test]
+async fn web_todo_delete_ok() -> Result<()> {
+	// -- FIXTURE
+	let db = init_db().await?;
+	let db = Arc::new(db);
+	let todo_apis = todo_rest_filters("api", db.clone()).recover(handle_rejection);
+
+	// -- ACTION
+	let resp = warp::test::request()
+		.method("DELETE")
+		.header("X-Auth-Token", "123")
+		.path("/api/todos/100")
+		.reply(&todo_apis)
+		.await;
+
+	// -- CHECK - status
+	assert_eq!(200, resp.status(), "http status");
+
+	// extract response .data
+	let todo: Todo = extract_body_data(resp)?;
+
+	// -- CHECK - .data (todos)
+	assert_eq!(100, todo.id);
+	assert_eq!("todo 100", todo.title);
+	assert_eq!(TodoStatus::Close, todo.status);
+
+	// -- CHECK - list .len() should be 1
+	let utx = utx_from_token(&db, "123").await?;
+	let todos = TodoMac::list(&db, &utx).await?;
+	assert_eq!(1, todos.len(), "todos length");
+	assert_eq!(101, todos[0].id, "Todo remaining should be 101");
 
 	Ok(())
 }
