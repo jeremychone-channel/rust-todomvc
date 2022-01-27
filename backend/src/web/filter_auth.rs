@@ -14,7 +14,7 @@ pub fn do_auth(db: Arc<Db>) -> impl Filter<Extract = (UserCtx,), Error = Rejecti
 		.and_then(|db: Arc<Db>, xauth: Option<String>| async move {
 			match xauth {
 				Some(xauth) => {
-					let utx = utx_from_token(&xauth).await?;
+					let utx = utx_from_token(&db, &xauth).await?;
 					Ok::<UserCtx, Rejection>(utx)
 				}
 				None => Err(Error::FailAuthMissingXAuth.into()),
