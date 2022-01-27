@@ -22,6 +22,13 @@ pub fn todo_rest_filters(
 		.and(common.clone())
 		.and_then(todo_list);
 
+	/// GET todo `GET /todos/100`
+	let get = todos_path
+		.and(warp::get())
+		.and(common.clone())
+		.and(warp::path::param())
+		.and_then(todo_get);
+
 	list
 }
 
