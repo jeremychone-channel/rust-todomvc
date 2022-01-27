@@ -3,7 +3,7 @@ use crate::model::{init_db, Todo, TodoStatus};
 use crate::web::handle_rejection;
 use anyhow::{Context, Result};
 use serde::Deserialize;
-use serde_json::{from_str, from_value, Value};
+use serde_json::{from_str, from_value, json, Value};
 use std::str::from_utf8;
 use std::sync::Arc;
 use warp::hyper::body::Bytes;
@@ -65,6 +65,41 @@ async fn web_todo_get_ok() -> Result<()> {
 	assert_eq!(100, todo.id);
 	assert_eq!("todo 100", todo.title);
 	assert_eq!(TodoStatus::Close, todo.status);
+
+	Ok(())
+}
+
+#[tokio::test]
+async fn web_todo_create_ok() -> Result<()> {
+	// -- FIXTURE
+	let db = init_db().await?;
+	let db = Arc::new(db);
+	let todo_apis = todo_rest_filters("api", db.clone()).recover(handle_rejection);
+	// new todo fixture
+	const TITLE: &str = "test - web_todo_create_ok";
+	let body = json!({
+		"title": TITLE,
+	});
+
+	// -- ACTION
+	let resp = warp::test::request()
+		.method("POST")
+		.header("X-Auth-Token", "123")
+		.path("/api/todos")
+		.json(&body)
+		.reply(&todo_apis)
+		.await;
+
+	// -- CHECK - status
+	assert_eq!(200, resp.status(), "http status");
+
+	// extract response .data
+	let todo: Todo = extract_body_data(resp)?;
+
+	// -- CHECK - .data (todo)
+	assert!(todo.id >= 1000, "todo.id should be >= to 1000");
+	assert_eq!(TITLE, todo.title);
+	assert_eq!(TodoStatus::Open, todo.status);
 
 	Ok(())
 }
