@@ -36,6 +36,14 @@ pub fn todo_rest_filters(
 		.and(warp::body::json())
 		.and_then(todo_create);
 
+	// UPDATE todo `PATCH /todos/100 with body TodoPatch`
+	let update = todos_path
+		.and(warp::patch())
+		.and(common.clone())
+		.and(warp::path::param())
+		.and(warp::body::json())
+		.and_then(todo_update);
+
 	list
 }
 
