@@ -1,6 +1,7 @@
 use super::filter_auth::do_auth;
 use crate::model::{Db, TodoMac};
 use crate::security::{utx_from_token, UserCtx};
+use serde::Serialize;
 use serde_json::json;
 use std::convert::Infallible;
 use std::sync::Arc;
@@ -25,12 +26,16 @@ pub fn todo_rest_filters(
 }
 
 async fn todo_list(db: Arc<Db>, utx: UserCtx) -> Result<Json, warp::Rejection> {
-	// FIXME: Add proper error handling
 	let todos = TodoMac::list(&db, &utx).await?;
+	json_response(todos)
+}
 
-	let response = json!({ "data": todos });
+// region:    Utils
+fn json_response<D: Serialize>(data: D) -> Result<Json, warp::Rejection> {
+	let response = json!({ "data": data });
 	Ok(warp::reply::json(&response))
 }
+// endregion: Utils
 
 // region:    Test
 #[cfg(test)]
