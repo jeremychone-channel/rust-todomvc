@@ -40,6 +40,35 @@ async fn web_todo_list() -> Result<()> {
 	Ok(())
 }
 
+#[tokio::test]
+async fn web_todo_get_ok() -> Result<()> {
+	// -- FIXTURE
+	let db = init_db().await?;
+	let db = Arc::new(db);
+	let todo_apis = todo_rest_filters("api", db).recover(handle_rejection);
+
+	// -- ACTION
+	let resp = warp::test::request()
+		.method("GET")
+		.header("X-Auth-Token", "123")
+		.path("/api/todos/100")
+		.reply(&todo_apis)
+		.await;
+
+	// -- CHECK - status
+	assert_eq!(200, resp.status(), "http status");
+
+	// extract response .data
+	let todo: Todo = extract_body_data(resp)?;
+
+	// -- CHECK - .data (todo)
+	assert_eq!(100, todo.id);
+	assert_eq!("todo 100", todo.title);
+	assert_eq!(TodoStatus::Close, todo.status);
+
+	Ok(())
+}
+
 // region:    Web Test Utils
 fn extract_body_data<D>(resp: Response<Bytes>) -> Result<D>
 where
