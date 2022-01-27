@@ -1,5 +1,6 @@
 use super::todo_rest_filters;
 use crate::model::{init_db, Todo, TodoStatus};
+use crate::web::handle_rejection;
 use anyhow::{Context, Result};
 use serde::Deserialize;
 use serde_json::{from_str, from_value, Value};
@@ -7,13 +8,14 @@ use std::str::from_utf8;
 use std::sync::Arc;
 use warp::hyper::body::Bytes;
 use warp::hyper::Response;
+use warp::Filter;
 
 #[tokio::test]
 async fn web_todo_list() -> Result<()> {
 	// -- FIXTURE
 	let db = init_db().await?;
 	let db = Arc::new(db);
-	let todo_apis = todo_rest_filters("api", db.clone());
+	let todo_apis = todo_rest_filters("api", db.clone()).recover(handle_rejection);
 
 	// -- ACTION
 	let resp = warp::test::request()
