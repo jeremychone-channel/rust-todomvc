@@ -44,6 +44,13 @@ pub fn todo_rest_filters(
 		.and(warp::body::json())
 		.and_then(todo_update);
 
+	// DELETE todo `DELETE /todos/100`
+	let delete = todos_path
+		.and(warp::delete())
+		.and(common.clone())
+		.and(warp::path::param())
+		.and_then(todo_delete);
+
 	list
 }
 
