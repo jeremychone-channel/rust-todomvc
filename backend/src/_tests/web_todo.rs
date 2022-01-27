@@ -104,6 +104,42 @@ async fn web_todo_create_ok() -> Result<()> {
 	Ok(())
 }
 
+#[tokio::test]
+async fn web_todo_update_ok() -> Result<()> {
+	// -- FIXTURE
+	let db = init_db().await?;
+	let db = Arc::new(db);
+	let todo_apis = todo_rest_filters("api", db.clone()).recover(handle_rejection);
+	// udpated todo
+	const TITLE: &str = "test - todo 100 updated";
+	let body = json!({
+		"title": TITLE,
+		"status": "Open"
+	});
+
+	// -- ACTION
+	let resp = warp::test::request()
+		.method("PATCH")
+		.header("X-Auth-Token", "123")
+		.path("/api/todos/100")
+		.json(&body)
+		.reply(&todo_apis)
+		.await;
+
+	// -- CHECK - status
+	assert_eq!(200, resp.status(), "http status");
+
+	// extract response .data
+	let todo: Todo = extract_body_data(resp)?;
+
+	// -- CHECK - .data (todo)
+	assert_eq!(100, todo.id, "todo.id");
+	assert_eq!(TITLE, todo.title);
+	assert_eq!(TodoStatus::Open, todo.status);
+
+	Ok(())
+}
+
 // region:    Web Test Utils
 fn extract_body_data<D>(resp: Response<Bytes>) -> Result<D>
 where
