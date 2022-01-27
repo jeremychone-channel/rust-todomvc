@@ -1,5 +1,5 @@
 use super::filter_auth::do_auth;
-use crate::model::{Db, TodoMac};
+use crate::model::{Db, TodoMac, TodoPatch};
 use crate::security::{utx_from_token, UserCtx};
 use serde::Serialize;
 use serde_json::json;
@@ -32,6 +32,21 @@ async fn todo_list(db: Arc<Db>, utx: UserCtx) -> Result<Json, warp::Rejection> {
 
 async fn todo_get(db: Arc<Db>, utx: UserCtx, id: i64) -> Result<Json, warp::Rejection> {
 	let todo = TodoMac::get(&db, &utx, id).await?;
+	json_response(todo)
+}
+
+async fn todo_create(db: Arc<Db>, utx: UserCtx, patch: TodoPatch) -> Result<Json, warp::Rejection> {
+	let todo = TodoMac::create(&db, &utx, patch).await?;
+	json_response(todo)
+}
+
+async fn todo_update(db: Arc<Db>, utx: UserCtx, id: i64, patch: TodoPatch) -> Result<Json, warp::Rejection> {
+	let todo = TodoMac::update(&db, &utx, id, patch).await?;
+	json_response(todo)
+}
+
+async fn todo_delete(db: Arc<Db>, utx: UserCtx, id: i64) -> Result<Json, warp::Rejection> {
+	let todo = TodoMac::delete(&db, &utx, id).await?;
 	json_response(todo)
 }
 
