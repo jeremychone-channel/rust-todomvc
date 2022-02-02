@@ -1,0 +1,45 @@
+{
+	"compilerOptions": {
+		// For browser
+		"target": "ES2021",
+
+		// For nodejs type: module
+		"module": "ESNext",
+
+		"moduleResolution": "node",
+
+		// full ts mode
+		"allowJs": false,
+		"checkJs": false,
+		"strict": true,
+
+		// dev info
+		"declaration": true,
+		"sourceMap": true, // for this lib, set to false
+
+		// use native class fields
+		"useDefineForClassFields": true,
+		"experimentalDecorators": true,
+
+		// for commonjs interop
+		"esModuleInterop": true,
+		// Disallow inconsistently-cased references to the same file.
+		"forceConsistentCasingInFileNames": true,
+
+		// paths info
+		"outDir": ".out/", // for checkin tsc output only. Rollup is used for runtieme
+		"baseUrl": ".",
+
+		// Speedup compile
+		"skipLibCheck": true
+	},
+
+	// We want more control about which code we will compile and exclude
+	"include": [
+		"./src/**/*.ts"
+	],
+
+	"exclude": [
+		"node_modules"
+	]
+}

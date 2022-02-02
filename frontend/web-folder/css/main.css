@@ -1,0 +1,196 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+/* #region    --- Base */
+*{
+	/* best practice for application */
+	box-sizing: border-box; 
+	/* To allow flex/grid box to shrink smaller than content. 
+		see: https://stackoverflow.com/a/36247448/686724 */
+	min-width: 0;
+	min-height: 0;
+	/* layout normalization */
+	margin: 0;
+	padding: 0;
+}
+
+html, body{
+	height: 100%; /* make sure the canvas is the browser window */
+}
+
+html{
+	overflow: hidden; /* prevent the browser 'bounce' (but will prevent screen scroll as well)*/
+}
+
+body{
+  padding: 2rem;
+  
+	font-family: 'Roboto', sans-serif;
+	font-size: 1rem;
+  
+	display: grid;
+  justify-content: center;
+  grid-auto-columns: minmax(10rem, 40rem);
+}
+/* #endregion --- Base */
+
+:root {
+	--color-green: #008800;
+	--txt: #333;
+	--txt-light: #999;
+}
+
+/* #region    --- c-ico */
+c-ico {
+  width: 1.5rem;
+  height: 1.5rem;
+
+  display: block;
+}
+
+c-ico svg { 
+	width: 100%;
+	height: 100%;
+}
+/* #endregion --- c-ico */
+
+/* #region    --- todo-mvc */
+todo-mvc {
+	display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: max-content max-content max-content;  
+}
+
+todo-mvc > div.box {
+	grid-column: 1;
+	grid-row: 2 / 4;
+
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
+              0 25px 50px 0 rgba(0, 0, 0, 0.1);  
+}
+
+todo-mvc > h1 {
+	grid-column: 1;
+	grid-row: 1;
+	
+	padding: 1rem 0;	
+
+	text-align: center;
+	font-weight: 100;
+	font-size: 6rem;
+	color: rgba(175, 47, 47, 0.15);
+}
+
+todo-input {
+	grid-column: 1;
+	grid-row: 2;
+}
+
+todo-list {
+	grid-column: 1;
+	grid-row: 3;
+}
+/* #endregion --- todo-mvc */
+
+/* #region    --- todo-input */
+todo-input {
+	display: grid;
+}
+
+todo-input input {
+	padding: 1rem 1rem;
+
+	font-size: 1.5rem;
+	border: none;
+	outline: none;
+	font-weight: 400;
+	border-bottom: solid 1px #ddd;
+	box-shadow: inset 0 -3px 1px rgba(0,0,0,0.03);
+}
+
+todo-input input::placeholder {
+	font-weight: 200;
+	color: #aaa;
+}
+/* #endregion --- todo-input */
+
+/* #region    --- todo-list */
+todo-list {
+	max-height: 600px;
+	overflow: auto;
+	
+	display: grid;
+  grid-auto-flow: row;
+	grid-auto-rows: max-content; 
+}
+/* #endregion --- todo-list */
+
+
+/* #region   --- todo-item */
+todo-item {
+  padding: 0 1rem;
+	height: 4rem;
+
+	font-size: 1.5rem;
+	border-bottom: solid 1px #ddd;
+	font-weight: 600;
+	color: var(--txt);
+
+	display: grid;
+	grid-template-columns: max-content 1fr max-content;	
+	align-items: center;
+	column-gap: 1rem;
+}
+
+c-check {
+	width: 2rem;
+	height: 2rem;
+
+	border: solid 1px #ddd;
+	border-radius: 2rem;
+
+	display: grid;
+	place-content: center;
+}
+
+c-check > c-ico {
+	fill: #fff;
+}
+
+todo-item.Close {
+	color: var(--txt-light);
+	font-weight: 300;
+
+	animation-name: text-to-close;
+	animation-duration: .400s;
+}
+
+todo-item.Close c-check {
+	background: var(--color-green);
+	border: solid 1px var(--color-green);
+
+	animation-name: c-check-to-close;
+	animation-duration: .400s;
+}
+
+todo-item.Close c-check c-ico {
+	display: block;
+}
+
+@keyframes c-check-to-close {
+  from {
+		background-color: #fff;
+	}
+  to {
+		background-color: var(--color-green);
+	}
+}
+
+@keyframes text-to-close {
+  from {
+		color: var(--txt);
+	}
+  to {
+		color: var(--txt-light);
+	}
+}
+/* #endregion --- todo-item */
