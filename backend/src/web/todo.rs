@@ -1,12 +1,11 @@
 use super::filter_auth::do_auth;
 use crate::model::{Db, TodoMac, TodoPatch};
-use crate::security::{utx_from_token, UserCtx};
+use crate::security::UserCtx;
 use serde::Serialize;
 use serde_json::json;
-use std::convert::Infallible;
 use std::sync::Arc;
 use warp::reply::Json;
-use warp::{Filter, Rejection};
+use warp::Filter;
 
 pub fn todo_rest_filters(
 	base_path: &'static str,
@@ -22,14 +21,14 @@ pub fn todo_rest_filters(
 		.and(common.clone())
 		.and_then(todo_list);
 
-	/// GET todo `GET /todos/100`
+	// GET todo `GET /todos/100`
 	let get = todos_path
 		.and(warp::get())
 		.and(common.clone())
 		.and(warp::path::param())
 		.and_then(todo_get);
 
-	/// CREATE todo `POST /todos with body TodoPatch`
+	// CREATE todo `POST /todos with body TodoPatch`
 	let create = todos_path
 		.and(warp::post())
 		.and(common.clone())

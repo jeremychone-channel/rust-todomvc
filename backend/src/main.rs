@@ -1,4 +1,4 @@
-#![allow(unused)] // silence unused warnings while exploring (to comment out)
+// #![allow(unused)] // silence unused warnings while exploring (to comment out)
 use model::init_db;
 use std::env;
 use std::sync::Arc;
