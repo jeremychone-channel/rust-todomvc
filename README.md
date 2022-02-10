@@ -5,6 +5,7 @@ YouTube tutorials:
 
 - Part 1 (database / model access) - https://youtu.be/VIig9IcQ-w8
 - Part 2 (web / warp filters) - https://youtu.be/plKzUo8F6Mg
+- Part 3 (frontend / #FrameworkLess) - https://youtu.be/DkR0tCBPqYc
 
 ## Dev Test 
 
