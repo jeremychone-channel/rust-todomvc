@@ -17,6 +17,7 @@ pub async fn start_web(web_folder: &str, web_port: u16, db: Arc<Db>) -> Result<(
 		return Err(Error::FailStartWebFolderNotFound(web_folder.to_string()));
 	}
 
+	println!("...1");
 	// Apis
 	let apis = todo_rest_filters("api", db);
 

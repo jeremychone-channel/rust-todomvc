@@ -7,6 +7,24 @@ YouTube tutorials:
 - Part 2 (web / warp filters) - https://youtu.be/plKzUo8F6Mg
 - Part 3 (frontend / #FrameworkLess) - https://youtu.be/DkR0tCBPqYc
 
+## Run the example
+
+```sh
+# Terminal 1 - start postgresql
+docker run --rm -p 5432:5432 -e "POSTGRES_PASSWORD=postgres" --name pg postgres:14
+
+# Terminal 2 - build frontend
+cd frontend
+npm run build
+
+# Terminal 3 - build backend
+cd backend
+cargo run -- ../frontend/web-folder
+```
+
+- Those terminals can be part of the VSCode terminals
+- Watch commands below for live development
+
 ## Dev Test 
 
 ```sh
@@ -17,10 +35,16 @@ cargo watch -q -c -w src/ -x 'test model_ -- --test-threads=1 --nocapture'
 cargo watch -q -c -w src/ -x 'test web_ -- --test-threads=1 --nocapture'
 ```
 
-## Dev Web
+## Live Dev
 
 ```sh
+# Terminal 1 - build & watch the backend code
+cd backend
 cargo watch -q -c -w src/ -x 'run -- ../frontend/web-folder'
+
+# Terminal 2 - build & watch the frontend
+cd frontend
+npm build -- -w
 ```
 
 ## DB
