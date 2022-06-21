@@ -15,8 +15,8 @@ serde_derive = "1.0"
 # Web libs
 warp = "0.3"
 # DB Libs
-sqlx = { version = "0.5", features = [ "runtime-tokio-rustls", "postgres" ] }
-sqlb = "0.0.7"
+sqlx = { version = "0.6", features = [ "runtime-tokio-rustls", "postgres" ] }
+sqlb = "0.0.8"
 
 [dev-dependencies]
 anyhow = "1"

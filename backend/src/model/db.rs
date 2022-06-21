@@ -71,7 +71,7 @@ async fn new_db_pool(host: &str, db: &str, user: &str, pwd: &str, max_con: u32) 
 	let con_string = format!("postgres://{}:{}@{}/{}", user, pwd, host, db);
 	PgPoolOptions::new()
 		.max_connections(max_con)
-		.connect_timeout(Duration::from_millis(500))
+		.acquire_timeout(Duration::from_millis(500)) // Needs to find replacement
 		.connect(&con_string)
 		.await
 }
